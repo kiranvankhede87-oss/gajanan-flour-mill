@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6b3516"><title>GAJANAN FLOUR MILL — Customer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eee;font-family:Arial,sans-serif;color:#2d211a}.app{max-width:480px;margin:auto;min-height:100vh;background:#fff}
+.page{display:none;min-height:100vh;padding-bottom:80px}.on{display:block}
+header{background:#6b3516;color:#fff;padding:15px;position:sticky;top:0;z-index:5}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800}
+main{padding:16px}.search{background:#fff;color:#777;border-radius:11px;padding:11px;margin-top:10px}.hero{background:#ead7c0;border-radius:17px;padding:19px;margin-bottom:17px}.hero h1{margin:0 0 6px;font-size:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{border:1px solid #eadfd3;border-radius:14px;padding:10px}.pic{height:100px;border-radius:11px;background:#f1e2cf;display:flex;align-items:center;justify-content:center;font-size:45px}.name{font-weight:700;margin:8px 0 4px}.price{font-weight:700;margin-bottom:8px}
+.row{display:flex;gap:6px}.btn{border:0;border-radius:10px;padding:10px;background:#6b3516;color:#fff;font-weight:700;cursor:pointer}.light{background:#fff;color:#6b3516;border:1px solid #6b3516}.wide{width:100%;margin-top:10px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);height:70px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:7px;z-index:6}.nav{border:0;background:none;font-size:11px;color:#665951;cursor:pointer}.nav b{display:block;font-size:20px}
+.back{border:0;background:none;font-size:25px;color:#6b3516}.line{padding:13px 0;border-bottom:1px solid #eee}.choice{border:1px solid #ddd;border-radius:12px;padding:13px;margin:8px 0}.choice.sel{border:2px solid #6b3516;background:#fffaf5}
+.order{border:1px solid #eadfd3;border-radius:13px;padding:13px;margin:10px 0}.green{color:#14823b;font-weight:bold}.login{min-height:100vh;background:#fbf6ef;padding:55px 24px;text-align:center}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:7px 0 10px}
+</style>
+</head>
+<body><div class="app">
+
+<section id="login" class="page on"><div class="login"><div style="font-size:64px">🌾</div><h1>GAJANAN FLOUR MILL</h1><p>Customer Registration</p>
+<input id="fullName" placeholder="Full Name">
+<input id="phone" inputmode="numeric" maxlength="10" placeholder="Mobile Number">
+<textarea id="address1" placeholder="Full Address"></textarea>
+<textarea id="address2" placeholder="Confirm Address"></textarea>
+<button class="btn wide" onclick="register()">Continue</button>
+<p style="font-size:12px;color:#76675d">OTP has been removed from this demo.</p></div></section>
+
+<section id="verify" class="page"><main><button class="back" onclick="go('login')">←</button><h2>Verify Mobile Number</h2><p style="font-size:13px;color:#76675d">Demo OTP: <b>1234</b></p><input id="otp" inputmode="numeric" maxlength="4" placeholder="Enter OTP"><button class="btn wide" onclick="verify()">Verify & Continue</button></main></section>
+
+<section id="home" class="page"><header><div class="top"><span class="brand">🌾 GAJANAN FLOUR MILL</span><button class="btn light" onclick="openMenu()">☰</button></div><div class="search">🔍 Search products...</div></header><main><div class="hero"><h1>Pure Flour, Healthy Life</h1><p style="color:#76675d">Freshly milled products delivered to your door.</p><button class="btn" onclick="go('products')">Shop Now</button></div><h3>Popular Products</h3><div id="homeGrid" class="grid"></div></main><nav class="bottom"></nav></section>
+
+<section id="products" class="page"><header><div class="top"><span class="brand">🌾 All Products</span><button class="btn light" onclick="openMenu()">☰</button></div></header><main><div id="productGrid" class="grid"></div></main><nav class="bottom"></nav></section>
+
+<section id="cart" class="page"><header><div class="top"><span class="brand">🛒 My Cart</span></div></header><main><div id="cartList"></div><div id="cartTotal"></div></main><nav class="bottom"></nav></section>
+
+<section id="checkout" class="page"><main><button class="back" onclick="go('cart')">←</button><h2>Checkout</h2><h3>Delivery Address</h3><input id="address" placeholder="Enter delivery address"><h3>Payment Method</h3><div id="cod" class="choice sel" onclick="pay='cod';selectPay()">💵 <b>Cash on Delivery</b></div><div id="upi" class="choice" onclick="pay='upi';selectPay()">📱 <b>UPI / PhonePe / Google Pay</b></div><h3>Delivery Charge</h3><div class="choice">🚚 <b>Free / Distance Based</b><br><small>Nearby orders are free; farther areas may have a small charge.</small></div><button class="btn wide" onclick="place()">Place Order</button></main></section>
+
+<section id="orders" class="page"><header><div class="top"><span class="brand">📦 My Orders</span></div></header><main id="ordersList"></main><nav class="bottom"></nav></section>
+
+<section id="profile" class="page"><header><div class="top"><span class="brand">👤 Profile</span></div></header><main><div class="card"><h3>Customer Profile</h3><p style="color:#76675d">Manage your account and shopping.</p></div><div class="choice">🚚 Free / Distance Based Delivery</div><div class="choice">💵 Cash on Delivery</div><div class="choice">📱 UPI / PhonePe / Google Pay</div></main><nav class="bottom"></nav></section>
+
+<div id="drawer" style="display:none;position:fixed;inset:0;background:#0006;z-index:10" onclick="if(event.target===this)closeMenu()"><div style="width:82%;height:100%;background:#fff;padding:20px"><div class="top"><h2>Menu</h2><button onclick="closeMenu()">✕</button></div><div class="line" onclick="go('home');closeMenu()">🏠 Home</div><div class="line" onclick="go('products');closeMenu()">🌾 Products</div><div class="line" onclick="go('cart');closeMenu()">🛒 My Cart</div><div class="line" onclick="go('orders');closeMenu()">📦 My Orders</div><div class="line" onclick="go('profile');closeMenu()">👤 Profile</div></div></div>
+
+<script>
+const P=[["Wheat Flour",45,"🌾"],["Bajra Flour",40,"🌾"],["Maize Flour",38,"🌽"],["Corn Flour",42,"🌽"],["Jowar Flour",40,"🌾"],["Other Products",0,"🛍️"]];
+let cart=[],orders=[],pay="cod";
+function go(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("on"));document.getElementById(id).classList.add("on");render();scrollTo(0,0)}
+function register(){
+ const n=document.getElementById('fullName')?.value.trim(), ph=document.getElementById('phone').value.trim();
+ const a=document.getElementById('address1')?.value.trim(), ca=document.getElementById('address2')?.value.trim();
+ if(!n||!ph||!a||!ca)return alert('Please fill all details.');
+ if(a!==ca)return alert('Address and Confirm Address must match.');
+ if(ph.length!==10)return alert('Enter a valid 10-digit mobile number.');
+ if(document.getElementById('checkoutAddress')) document.getElementById('checkoutAddress').value=a;
+ go('home');
+}
+function verify(){if(document.getElementById("otp").value==="1234")go("home");else alert("Demo OTP is 1234")}
+function openMenu(){document.getElementById("drawer").style.display="block"}function closeMenu(){document.getElementById("drawer").style.display="none"}
+function add(i){let x=cart.find(a=>a.i===i);if(x)x.q++;else cart.push({i,q:1});render();alert("Added to cart 🛒")}
+function change(n,d){cart[n].q+=d;if(cart[n].q<1)cart.splice(n,1);render()}
+function card(i){let p=P[i];return `<div class="card"><div class="pic">${p[2]}</div><div class="name">${p[0]}</div><div class="price">${p[1]?"₹"+p[1]+"/kg":"Explore more"}</div><div class="row"><button class="btn" onclick="add(${i})">Add to Cart</button><button class="btn light" onclick="add(${i});go('cart')">Order Now</button></div></div>`}
+function render(){
+ homeGrid.innerHTML=P.slice(0,4).map((_,i)=>card(i)).join("");productGrid.innerHTML=P.map((_,i)=>card(i)).join("");
+ cartList.innerHTML=cart.length?cart.map((x,n)=>`<div class="line"><b>${P[x.i][2]} ${P[x.i][0]}</b><br>₹${P[x.i][1]} × ${x.q} kg <button class="btn light" onclick="change(${n},-1)">−</button> <button class="btn light" onclick="change(${n},1)">+</button></div>`).join(""):"<p style='color:#76675d'>Your cart is empty.</p>";
+ let t=cart.reduce((s,x)=>s+P[x.i][1]*x.q,0);cartTotal.innerHTML=cart.length?`<div class="choice"><b>Subtotal: ₹${t}</b><br>🚚 Delivery: <b>₹0*</b><br><small>*Demo nearby rate.</small></div><button class="btn wide" onclick="go('checkout')">Proceed to Checkout</button>`:"";
+ ordersList.innerHTML=orders.length?orders.map(o=>`<div class="order"><b>Order #${o.id}</b><p>${o.items} item(s) • ₹${o.total}</p><p class="green">🟢 Order Placed</p><small>${o.pay==="cod"?"Cash on Delivery":"UPI / Online"}</small></div>`).join(""):"<p style='color:#76675d'>No orders yet.</p>";
+ document.querySelectorAll(".bottom").forEach(n=>n.innerHTML=`<button class="nav" onclick="go('home')"><b>⌂</b>Home</button><button class="nav" onclick="go('products')"><b>▦</b>Products</button><button class="nav" onclick="go('cart')"><b>🛒</b>Cart (${cart.reduce((s,x)=>s+x.q,0)})</button><button class="nav" onclick="go('orders')"><b>▤</b>Orders</button><button class="nav" onclick="go('profile')"><b>◯</b>Profile</button>`);
+}
+function selectPay(){cod.classList.toggle("sel",pay==="cod");upi.classList.toggle("sel",pay==="upi")}
+function place(){if(!cart.length)return alert("Cart is empty");if(!address.value.trim())return alert("Please enter address");let t=cart.reduce((s,x)=>s+P[x.i][1]*x.q,0);orders.unshift({id:Math.floor(1000+Math.random()*9000),items:cart.reduce((s,x)=>s+x.q,0),total:t,pay});cart=[];address.value="";go("orders");alert("Order placed successfully 🎉")}
+render();
+</script></div></body></html>

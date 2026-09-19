@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6b3516">
+<title>AARA Atta Chakki — Owner App</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eee;font-family:Arial,sans-serif;color:#2d211a}
+.app{max-width:480px;margin:auto;min-height:100vh;background:#fff}.page{display:none;min-height:100vh;padding-bottom:80px}.on{display:block}
+header{background:#6b3516;color:#fff;padding:16px;position:sticky;top:0;z-index:5}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800}
+main{padding:16px}.hero{background:#ead7c0;border-radius:17px;padding:18px;margin-bottom:16px}
+h1,h2,h3,p{margin-top:0}.muted{color:#76675d;font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{border:1px solid #eadfd3;border-radius:14px;padding:14px;background:#fff}
+.stat{font-size:25px;font-weight:800;margin-top:5px}.icon{font-size:28px}
+.btn{border:0;border-radius:10px;padding:11px 13px;background:#6b3516;color:#fff;font-weight:700;cursor:pointer}
+.light{background:#fff;color:#6b3516;border:1px solid #6b3516}.wide{width:100%;margin-top:10px}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0 10px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.product,.order{border:1px solid #eadfd3;border-radius:13px;padding:13px;margin:10px 0}
+.product{display:flex;align-items:center;gap:12px}.pic{width:55px;height:55px;border-radius:10px;background:#f1e2cf;display:flex;align-items:center;justify-content:center;font-size:28px}
+.grow{flex:1}.small{font-size:12px}.green{color:#14823b;font-weight:bold}.orange{color:#a45b00;font-weight:bold}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);height:70px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:7px;z-index:6}
+.nav{border:0;background:none;font-size:11px;color:#665951;cursor:pointer}.nav b{display:block;font-size:20px}
+.login{min-height:100vh;background:#fbf6ef;padding:55px 24px;text-align:center}
+</style>
+</head>
+<body><div class="app">
+
+<section id="login" class="page on">
+<div class="login"><div style="font-size:64px">🌾</div><h1>GAJANAN FLOUR MILL</h1><p class="muted">Owner / Admin App</p>
+<input id="ownerUser" placeholder="Owner mobile / username">
+<div class="passwrap"><input id="ownerPass" type="password" placeholder="Password"><button class="eye" type="button" onclick="togglePassword()" aria-label="Show password">👁️</button></div>
+<button class="btn wide" onclick="login()">Owner Login</button>
+<p class="muted">Demo: any username + password works.</p></div>
+</section>
+
+<section id="dashboard" class="page">
+<header><div class="top"><span class="brand">🌾 Owner Dashboard</span><button class="btn light" onclick="logout()">Logout</button></div></header>
+<main>
+<div class="hero"><h2>Good morning, Owner 👋</h2><p class="muted">Manage your AARA Atta Chakki business.</p></div>
+<div class="grid">
+<div class="card"><div class="icon">📦</div><div>New Orders</div><div class="stat" id="newCount">0</div></div>
+<div class="card"><div class="icon">💰</div><div>Today's Sales</div><div class="stat">₹0</div></div>
+<div class="card"><div class="icon">📈</div><div>Profit</div><div class="stat">₹0</div></div>
+<div class="card"><div class="icon">⚠️</div><div>Low Stock</div><div class="stat">0</div></div>
+</div>
+<button class="btn wide" onclick="go('products')">➕ Manage Products</button>
+<button class="btn light wide" onclick="go('orders')">📦 Manage Orders</button>
+<button class="btn light wide" onclick="go('delivery')">🚚 Delivery Settings</button>
+</main><nav class="bottom"></nav>
+</section>
+
+<section id="products" class="page">
+<header><div class="top"><span class="brand">📦 Products</span><button class="btn light" onclick="go('dashboard')">Home</button></div></header>
+<main><button class="btn wide" onclick="addProduct()">➕ Add Product</button><div id="productsList"></div></main><nav class="bottom"></nav>
+</section>
+
+<section id="add" class="page">
+<main><button class="btn light" onclick="go('products')">← Back</button><h2>➕ Add Product</h2>
+<input id="pname" placeholder="Product name">
+<input id="pprice" type="number" placeholder="Price per kg">
+<input id="pstock" type="number" placeholder="Stock in kg">
+<select id="picon"><option>🌾</option><option>🌽</option><option>🛍️</option></select>
+<button class="btn wide" onclick="saveProduct()">Save Product</button></main>
+</section>
+
+<section id="orders" class="page">
+<header><div class="top"><span class="brand">📦 Customer Orders</span></div></header>
+<main id="ordersList"></main><nav class="bottom"></nav>
+</section>
+
+<section id="delivery" class="page">
+<header><div class="top"><span class="brand">🚚 Delivery Settings</span></div></header>
+<main><div class="card"><h3>Distance-based Delivery</h3>
+<p class="muted">Example rates — owner can change them.</p>
+<label>0–3 km</label><input value="0">
+<label>3–5 km</label><input value="10">
+<label>5–7 km</label><input value="15">
+<label>7–10 km</label><input value="20">
+<label>10–15 km</label><input value="25">
+<label>15–20 km</label><input value="30">
+<button class="btn wide" onclick="alert('Delivery settings saved ✓')">Save Settings</button></div></main><nav class="bottom"></nav>
+</section>
+
+<script>
+let products=[
+["Wheat Flour",45,50,"🌾"],["Bajra Flour",40,40,"🌾"],["Maize Flour",38,30,"🌽"],
+["Corn Flour",42,25,"🌽"],["Jowar Flour",40,35,"🌾"]
+];
+let orders=[
+{id:1001,name:"Demo Customer",items:"Wheat Flour × 2 kg",total:90,status:"New"}
+];
+
+function togglePassword(){
+ const f=document.getElementById('ownerPass'), b=document.querySelector('.eye');
+ if(f.type==='password'){f.type='text';b.textContent='🙈';b.setAttribute('aria-label','Hide password');}
+ else{f.type='password';b.textContent='👁️';b.setAttribute('aria-label','Show password');}
+}
+function login(){document.getElementById("ownerUser").value?go("dashboard"):alert("Enter owner username")}
+function logout(){go("login")}
+function go(id){document.querySelectorAll(".page").forEach(x=>x.classList.remove("on"));document.getElementById(id).classList.add("on");render();scrollTo(0,0)}
+function addProduct(){go("add")}
+function saveProduct(){
+ let n=document.getElementById("pname").value.trim(),p=Number(document.getElementById("pprice").value),s=Number(document.getElementById("pstock").value),ic=document.getElementById("picon").value;
+ if(!n||!p||!s)return alert("Please fill all product details");
+ products.push([n,p,s,ic]);alert("Product added ✓");go("products");
+}
+function editProduct(i){let p=products[i],n=prompt("Product name",p[0]);if(!n)return;let price=Number(prompt("Price per kg",p[1]));let stock=Number(prompt("Stock kg",p[2]));products[i]=[n,price||p[1],stock||p[2],p[3]];render()}
+function deleteProduct(i){if(confirm("Delete this product?")){products.splice(i,1);render()}}
+function updateOrder(i,status){orders[i].status=status;render()}
+function render(){
+ if(!document.getElementById("productsList"))return;
+ document.getElementById("productsList").innerHTML=products.map((p,i)=>`<div class="product"><div class="pic">${p[3]}</div><div class="grow"><b>${p[0]}</b><br>₹${p[1]}/kg<br><span class="${p[2]<10?'orange':'green'}">Stock: ${p[2]} kg</span></div><button class="btn light" onclick="editProduct(${i})">Edit</button><button class="btn light" onclick="deleteProduct(${i})">Delete</button></div>`).join("");
+ document.getElementById("ordersList").innerHTML=orders.map((o,i)=>`<div class="order"><b>Order #${o.id}</b><p>${o.name}</p><p>${o.items}</p><b>₹${o.total}</b><p class="${o.status==='New'?'orange':'green'}">${o.status}</p><div class="row"><button class="btn" onclick="updateOrder(${i},'Accepted')">Accept</button><button class="btn light" onclick="updateOrder(${i},'Rejected')">Reject</button></div><button class="btn light wide" onclick="updateOrder(${i},'Out for Delivery')">🚚 Out for Delivery</button><button class="btn wide" onclick="updateOrder(${i},'Delivered')">✓ Delivered</button></div>`).join("");
+ document.getElementById("newCount").textContent=orders.filter(o=>o.status==="New").length;
+ document.querySelectorAll(".bottom").forEach(n=>n.innerHTML=`<button class="nav" onclick="go('dashboard')"><b>⌂</b>Home</button><button class="nav" onclick="go('products')"><b>📦</b>Products</button><button class="nav" onclick="go('orders')"><b>📋</b>Orders</button><button class="nav" onclick="go('delivery')"><b>🚚</b>Delivery</button>`);
+}
+render();
+</script></div></body></html>
